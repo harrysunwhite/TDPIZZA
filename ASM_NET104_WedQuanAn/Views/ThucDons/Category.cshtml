@@ -1,0 +1,98 @@
+﻿@model IEnumerable<GroupTD>
+
+<div class="maincontent">
+    <div class="container">
+        <section id="menu">
+            <div class="block menu1">
+                <div class="buttons-container">
+                    @{
+                        <a href="#" class="button button--is-active" data-target="all" data-toggle="collapse">Tất cả</a>
+                        var result = from p in (ViewData["All"] as IEnumerable<ThucDon>)
+                                     group p by p.Nhom into g
+                                     select new GroupTD { MaNhom = "a" + g.Key.ToString(), ThucDons = g.ToList() };
+                        foreach (var group in ViewData["Nhom"] as IEnumerable<Nhom>)
+                        {
+                            string maNhom = "a" + group.MaNhom.ToString();
+
+                            <a href="#" class="button" data-target="@maNhom" data-toggle="collapse">@group.TenNhom</a>
+                        }
+                    }
+
+                </div>
+
+                @{
+                                <div class="menu menu--is-visible" id="all">
+                                    @foreach (var td in ViewData["All"] as IEnumerable<ThucDon>
+                                        )
+                                        {
+                                        <div class="item row align-items-center">
+                                            <div class="col-sm-3 pr-5">
+                                                <img class="product-img" src="~/img/1.png">
+                                            </div>
+                                            <div class="details col-sm-9">
+                                                <div class="item__header">
+                                                    <h3 class="item__title">@td.TenTd</h3>
+                                                    <span class="item__dots"></span>
+                                                    <span class="item__price">@td.Price?.ToString("n0").Replace(',', '.') VND</span>
+                                                </div>
+                                                <p class="item__description">
+                                                    @td.MoTa
+                                                </p>
+                                                <button class="btn btn-sm btn-outline-primary my-cart-btn"
+                                                        data-id="1" data-name="Cheese Pizza" data-price="15" data-quantity="1"
+                                                        data-image="~/img/1.png">
+                                                    Add to cart
+                                                </button>
+                                            </div>
+                                        </div>
+                                        }
+
+                                </div>
+
+                      
+
+                            foreach (var group in result)
+                            {
+                            <div class="menu menu--is-visible" id="@group.MaNhom">
+
+                                @foreach (ThucDon td in group.ThucDons)
+                                {
+                                    <div class="item row align-items-center">
+                                        <div class="col-sm-3 pr-5">
+                                            <img class="product-img" src="~/img/1.png">
+                                        </div>
+                                        <div class="details col-sm-9">
+                                            <div class="item__header">
+                                                <h3 class="item__title">@td.TenTd</h3>
+                                                <span class="item__dots"></span>
+                                                <span class="item__price">@td.Price?.ToString("n0").Replace(',', '.') VND</span>
+                                            </div>
+                                            <p class="item__description">
+                                                @td.MoTa
+                                            </p>
+                                            <button class="btn btn-sm btn-outline-primary my-cart-btn"
+                                                    data-id="1" data-name="Cheese Pizza" data-price="15" data-quantity="1"
+                                                    data-image="~/img/1.png">
+                                                Add to cart
+                                            </button>
+                                        </div>
+                                    </div>
+                                }
+
+
+
+                            </div>
+
+
+                            }
+                            }
+
+
+
+
+                            <!-- End block -->
+                            <script src="~/js/mycart.js"></script>
+                            <script src="~/js/mycart-custom.js"></script>
+</section>
+    </div>
+</div>

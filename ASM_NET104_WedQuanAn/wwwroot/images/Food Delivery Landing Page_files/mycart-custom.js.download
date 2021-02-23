@@ -45,12 +45,9 @@ function handleClick(e) {
   const targetMenu = document.querySelector(`#${this.dataset.target}`);
   menus.forEach(menu => {
     menu.classList.remove('menu--is-visible');
-      targetMenu.classList.add('menu--is-visible');
+    targetMenu.classList.add('menu--is-visible');
   })
-    
 }
-
-
 
 window.addEventListener('load', initialHightlightLocation);
 window.addEventListener('resize', initialHightlightLocation);
@@ -61,11 +58,10 @@ buttons.forEach(button => button.addEventListener('click', handleClick));
 $(function () {
 
   var goToCartIcon = function($addTocartBtn){
-      var $cartIcon = $(".my-cart-icon");
-      var position = $cartIcon.position();
-      var $image = $('<img width="30px" height="30px" src="' + $addTocartBtn.data("image") + '"/>')
-  
-    
+    var $cartIcon = $(".my-cart-icon");
+    var $image = $('<img width="30px" height="30px" src="' + $addTocartBtn.data("image") + '"/>').css({"position": "fixed", "z-index": "999"});
+    $addTocartBtn.prepend($image);
+    var position = $cartIcon.position();
     $image.animate({
       top: position.top,
       left: position.left
@@ -91,7 +87,7 @@ $(function () {
       $.each(products, function(){
         total += this.quantity * this.price;
       });
-      return total;
+      return total * 0.5;
     }
   });
 

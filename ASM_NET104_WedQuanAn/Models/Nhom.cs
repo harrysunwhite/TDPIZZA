@@ -12,7 +12,7 @@ namespace ASM_NET104_WedQuanAn.Models
             ThucDons = new HashSet<ThucDon>();
         }
 
-        public int MaNhom { get; set; }
+        public int? MaNhom { get; set; }
         public string TenNhom { get; set; }
 
         public virtual ICollection<ThucDon> ThucDons { get; set; }

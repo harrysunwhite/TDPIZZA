@@ -14,85 +14,109 @@
                         {
                             string maNhom = "a" + group.MaNhom.ToString();
 
-                            <a href="#" class="button" data-target="@maNhom" data-toggle="collapse">@group.TenNhom</a>
+
+                            <a href="#" id="@group.MaNhom" class="button" data-target="@maNhom" data-toggle="collapse" onclick="displaydom(this.id)">@group.TenNhom</a>
                         }
                     }
 
                 </div>
 
                 @{
-                                <div class="menu menu--is-visible" id="all">
-                                    @foreach (var td in ViewData["All"] as IEnumerable<ThucDon>
-                                        )
-                                        {
-                                        <div class="item row align-items-center">
-                                            <div class="col-sm-3 pr-5">
-                                                <img class="product-img" src="~/img/1.png">
-                                            </div>
-                                            <div class="details col-sm-9">
-                                                <div class="item__header">
-                                                    <h3 class="item__title">@td.TenTd</h3>
-                                                    <span class="item__dots"></span>
-                                                    <span class="item__price">@td.Price?.ToString("n0").Replace(',', '.') VND</span>
-                                                </div>
-                                                <p class="item__description">
-                                                    @td.MoTa
-                                                </p>
-                                                <button class="btn btn-sm btn-outline-primary my-cart-btn"
-                                                        data-id="1" data-name="Cheese Pizza" data-price="15" data-quantity="1"
-                                                        data-image="~/img/1.png">
-                                                    Add to cart
-                                                </button>
-                                            </div>
-                                        </div>
-                                        }
-
+                    <div class="menu menu--is-visible" id="all">
+                        @foreach (var td in ViewData["All"] as IEnumerable<ThucDon>
+                          )
+                        {
+                            <div class="item row align-items-center">
+                                <div class="col-sm-3 pr-5">
+                                    <img class="product-img" src="~/img/@td.Hinh" id="id+@td.Hinh">
                                 </div>
-
-                      
-
-                            foreach (var group in result)
-                            {
-                            <div class="menu menu--is-visible" id="@group.MaNhom">
-
-                                @foreach (ThucDon td in group.ThucDons)
-                                {
-                                    <div class="item row align-items-center">
-                                        <div class="col-sm-3 pr-5">
-                                            <img class="product-img" src="~/img/1.png">
-                                        </div>
-                                        <div class="details col-sm-9">
-                                            <div class="item__header">
-                                                <h3 class="item__title">@td.TenTd</h3>
-                                                <span class="item__dots"></span>
-                                                <span class="item__price">@td.Price?.ToString("n0").Replace(',', '.') VND</span>
-                                            </div>
-                                            <p class="item__description">
-                                                @td.MoTa
-                                            </p>
-                                            <button class="btn btn-sm btn-outline-primary my-cart-btn"
-                                                    data-id="1" data-name="Cheese Pizza" data-price="15" data-quantity="1"
-                                                    data-image="~/img/1.png">
-                                                Add to cart
-                                            </button>
-                                        </div>
+                                <div class="details col-sm-9">
+                                    <div class="item__header">
+                                        <h3 class="item__title">@td.TenTd</h3>
+                                        <span class="item__dots"></span>
+                                        <span class="item__price">@td.Price?.ToString("n0").Replace(',', '.') VND</span>
                                     </div>
-                                }
-
-
-
+                                    <p class="item__description">
+                                        @td.MoTa
+                                    </p>
+                                    <button class="btn btn-sm btn-outline-primary my-cart-btn"
+                                            data-id="@td.MaTd" data-name="@td.TenTd" data-price="@td.Price" data-quantity="1"
+                                            data-image="./img/@td.Hinh">
+                                        Add to cart
+                                    </button>
+                                    @*<a asp-route="addcart"
+                                        asp-route-productid="@td.MaTd"
+                                        class="btn btn-secondary btn-sm float-right">Đặt hàng</a>*@
+                                </div>
                             </div>
+                        }
+
+                    </div>
 
 
+
+                    foreach (var group in result)
+                    {
+                        <div class="menu" id="@group.MaNhom">
+
+                            @foreach (ThucDon td in group.ThucDons)
+                            {
+                                <div class="item row align-items-center">
+                                    <div class="col-sm-3 pr-5">
+                                        <img class="product-img" src="~/img/@td.Hinh" id="id+@td.Hinh">
+                                    </div>
+                                    <div class="details col-sm-9">
+                                        <div class="item__header">
+                                            <h3 class="item__title">@td.TenTd</h3>
+                                            <span class="item__dots"></span>
+                                            <span class="item__price">@td.Price?.ToString("n0").Replace(',', '.') VND</span>
+                                        </div>
+                                        <p class="item__description">
+                                            @td.MoTa
+                                        </p>
+                                        <button class="btn btn-sm btn-outline-primary my-cart-btn"
+                                                data-id="@td.MaTd" data-name="@td.TenTd" data-price="@td.Price" data-quantity="1"
+                                                data-image="@td.Hinh">
+                                            Add to cart
+                                        </button>
+                                        @*<a asp-route="addcart"
+                                            asp-route-productid="@td.MaTd"
+                                            class="btn btn-secondary btn-sm float-right">Đặt hàng</a>*@
+                                    </div>
+                                </div>
                             }
-                            }
+
+
+
+                        </div>
+
+
+                    }
+                }
 
 
 
 
-                            <!-- End block -->
-                            <script src="~/js/mycart.js"></script>
-                            <script src="~/js/mycart-custom.js"></script>
-</section>
+                <!-- End block -->
+
+            </div>
+
+        </section>
     </div>
 </div>
+<div class="nav-item my-cart-icon">
+    <img src="~/img/cart.svg" style="width:20px;"> <span class="badge badge-notify my-cart-badge"> </span>
+</div>
+@*<script>
+        function displaydom(x) {
+            var all = document.getElementsByClassName("menu--is-visible")
+            var l = all.length;
+            alert(l);
+            for (i = i; i < l; i++) {
+                all[i].style.display = "None";
+            }
+
+           var dom = document.getElementById("a" + x);
+            dom.style.display ="Block"
+        }
+    </script>*@

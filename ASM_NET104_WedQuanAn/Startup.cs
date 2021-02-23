@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ASM_NET104_WedQuanAn.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json.Serialization;
 
 namespace ASM_NET104_WedQuanAn
 {
@@ -25,10 +27,25 @@ namespace ASM_NET104_WedQuanAn
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddDistributedMemoryCache();           // Đăng ký dịch vụ lưu cache trong bộ nhớ (Session sẽ sử dụng nó)
+            services.AddSession(cfg =>
+            {                    // Đăng ký dịch vụ Session
+                cfg.Cookie.Name = "CartCache";             // Đặt tên Session - tên này sử dụng ở Browser (Cookie)
+                cfg.IdleTimeout = new TimeSpan(0, 30, 0);    // Thời gian tồn tại của Session
+            });
             var connection = Configuration.GetConnectionString("ProductConnection");
            
-            services.AddDbContext<ASMFINALContext>(options => options.UseSqlServer(connection));
+          
+           
+            services.AddDbContextPool<ASMFINALContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DataContextConnection")));
+
+            services.AddTransient(typeof(DbContext), typeof(ASMFINALContext));
+
             services.AddControllersWithViews();
+
+            services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,6 +62,7 @@ namespace ASM_NET104_WedQuanAn
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+            app.UseSession();
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -55,7 +73,7 @@ namespace ASM_NET104_WedQuanAn
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=thucdons}/{action=category}/{id?}");
+                    pattern: "{controller=Thucdons}/{action=Category}/{id?}");
             });
         }
     }

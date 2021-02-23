@@ -8,17 +8,19 @@ namespace ASM_NET104_WedQuanAn.Models
 {
     public partial class ASMFINALContext : DbContext
     {
-        public ASMFINALContext()
-        {
-        }
+        //public ASMFINALContext()
+        //{
+        //}
 
         public ASMFINALContext(DbContextOptions<ASMFINALContext> options)
             : base(options)
         {
         }
 
+        public virtual DbSet<CartDetail> CartDetails { get; set; }
         public virtual DbSet<Nhom> Nhoms { get; set; }
         public virtual DbSet<ThucDon> ThucDons { get; set; }
+        public virtual DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -31,6 +33,15 @@ namespace ASM_NET104_WedQuanAn.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+
+            modelBuilder.Entity<CartDetail>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("CartDetail");
+
+                entity.Property(e => e.Sl).HasColumnName("SL");
+            });
 
             modelBuilder.Entity<Nhom>(entity =>
             {
@@ -71,6 +82,21 @@ namespace ASM_NET104_WedQuanAn.Models
                     .HasForeignKey(d => d.Nhom)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ThucDon_nhom");
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasKey(e => e.UserEmail);
+
+                entity.ToTable("User");
+
+                entity.Property(e => e.UserEmail)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Pass)
+                    .IsRequired()
+                    .IsUnicode(false);
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -7,7 +7,7 @@ $(document).ready(
 
 function _getAll() {
     $.ajax({
-        url: "api/Nhom",
+        url: "/api/Nhom",
         type: "GET",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -17,13 +17,13 @@ function _getAll() {
                 html += '<tr>';
                 html += '<td>' + item.MaNhom + '</td>';
                 html += '<td>' + item.TenNhom + '</td>';
+              
                 html += '<td><a class="btn btn-secondary btn-lg active" onclick="return _getById(' + item.MaNhom + ')">Edit</a> | <a  class="btn btn-secondary btn-lg active"  onclick="return _delete(' + item.MaNhom + ')">Delete</a></td>';
                 html += '</tr>';
             });
             $('#list tbody').html(html);
         },
         error: function (errormessage) {
-           
             alert(errormessage.responseText);
         }
     });

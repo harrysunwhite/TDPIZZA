@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ASM_NET104_WedQuanAn.Models.ThucDon>
+﻿@model ASM_NET104_WedQuanAn.Models.ThucDon
 
 @{
     ViewData["Title"] = "Index";
@@ -6,10 +6,14 @@
 }
 
 
+
+
+
+
 <h1>Thực Đơn</h1>
 
 <p>
-    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModalStudent">
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal1">
         Create
     </button>
     <hr />
@@ -18,48 +22,53 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.TenTd)
+                Tên món
+            </th>
+           
+            <th>
+                Hình Ảnh
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MoTa)
+                Giá Bán
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Hinh)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NhomNavigation)
+               Nhóm
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in ViewData["All"] as IEnumerable<ThucDon>)
+        @{
+            var result = from p in (ViewData["All"] as IEnumerable<ThucDon>)
+                         group p by p.Nhom into g
+                         select new GroupTD { MaNhom = "a" + g.Key.ToString(), ThucDons = g.ToList() };
+        }
+        @foreach (var group in result)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TenTd)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MoTa)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Hinh)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NhomNavigation.TenNhom)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.MaTd">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.MaTd">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.MaTd">Delete</a>
-                </td>
-            </tr>
+            foreach (var item in group.ThucDons)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TenTd)
+                    </td>
+                    
+                    <td>
+                        <img src="~/img/@item.Hinh" width="200" height="200"/>
+                    </td>
+                    <td>
+                        @item.Price?.ToString("n0").Replace(',', '.') VND
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NhomNavigation.TenNhom)
+                    </td>
+                    <td>
+                        <a class="btn btn-secondary btn-lg active" onclick=" return _getByTDId(@item.MaTd )">Edit</a>
+                        |
+                        <a class="btn btn-secondary btn-lg active" onclick=" return _deleteTD(@item.MaTd )">Delete</a>
+                    </td>
+                </tr>
+            }
+
         }
     </tbody>
 </table>
@@ -117,8 +126,110 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Nhóm</h4>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Create" enctype="multipart/form-data" id="formTD"  runat="server">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                  
+                    <div class="form-group">
+                        <label for="Tentd" class="control-label">Tên Món</label>
+                        <input asp-for="TenTd" class="form-control" />
+                        <span asp-validation-for="TenTd" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="MoTa" class="control-label">Mô tả</label>
+                        <input asp-for="MoTa" class="form-control" />
+                        <span asp-validation-for="MoTa" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="ImageFile" class="control-label">Hình Ảnh</label>
+                        <br />
+                        <img src="~/images/unchose.jpg" id="imgTD" width="200" height="200" />
+                        <input asp-for="ImageFile"  accept="image/*" />
+
+                    </div>
+                    <div class="form-group">
+                        <label for="Nhom" class="control-label">Nhóm</label>
+                        <select asp-for="Nhom" class="form-control" asp-items="ViewBag.DATA" ></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Price" class="control-label">Giá</label>
+                        <input asp-for="Price" class="form-control"/>
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" form="formTD" class="btn btn-primary" id="btnAddTD">Add</button>
+               
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Nhóm</h4>
+            </div>
+            <div class="modal-body">
+                <form method="post" enctype="multipart/form-data" id="formEdit" runat="server">
+                    <div class="form-group">
+                        <label for="MaTd" class="control-label">Mã Thực đơn</label>
+                        <input asp-for="MaTd" class="form-control" id="MaTD" readonly />
+                        
+                    </div>
+
+                    <div class="form-group">
+                        <label for="TenTd" class="control-label">Tên Món</label>
+                        <input asp-for="TenTd" class="form-control" id="TenTD" />
+                        <span asp-validation-for="TenTd" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="MoTa" class="control-label">Mô tả</label>
+                        <input asp-for="MoTa" class="form-control" id="MoTaTD" />
+                        <span asp-validation-for="MoTa" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ImageFile" class="control-label"></label>
+                        <br />
+                        <img src="~/images/unchose.jpg" id="imgTDu" width="200" height="200" />
+                        <input asp-for="ImageFile" accept="image/*" id="imgfileu" />
+
+                    </div>
+                    <div class="form-group">
+                        <label for="Nhom" class="control-label">Nhóm</label>
+                        <select asp-for="Nhom" class="form-control" asp-items="ViewBag.DATA" id="NhomTD"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Price" class="control-label"></label>
+                        <input asp-for="Price" class="form-control" id="GiaTD" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                
+                <button type="submit" form="formEdit" class="btn btn-primary" id="btnUpdateTD">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
 
-    
+   
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -23,10 +23,11 @@
 
                 @{
                     <div class="menu menu--is-visible" id="all">
-                        @foreach (var td in ViewData["All"] as IEnumerable<ThucDon>
-                          )
+                        @foreach(var group in result)
                         {
-                            <div class="item row align-items-center">
+                            foreach(var td in group.ThucDons)
+                            {
+                                <div class="item row align-items-center">
                                 <div class="col-sm-3 pr-5">
                                     <img class="product-img" src="~/img/@td.Hinh" id="id+@td.Hinh">
                                 </div>
@@ -49,7 +50,9 @@
                                         class="btn btn-secondary btn-sm float-right">Đặt hàng</a>*@
                                 </div>
                             </div>
+                            }
                         }
+                       
 
                     </div>
 

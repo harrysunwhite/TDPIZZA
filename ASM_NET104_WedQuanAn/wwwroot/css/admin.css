@@ -1,0 +1,57 @@
+﻿.slick - slider{ position: relative; display: block; box - sizing: border - box; -webkit - user - select: none; -moz - user - select: none; -ms - user - select: none; user - select: none; -webkit - touch - callout: none; -khtml - user - select: none; -ms - touch - action: pan - y; touch - action: pan - y; -webkit - tap - highlight - color: transparent; }.slick - list{ position: relative; display: block; overflow: hidden; margin: 0; padding: 0; }.slick - list: focus{ outline: none; }.slick - list.dragging{ cursor: pointer; cursor: hand; }.slick - slider.slick - track,.slick - slider.slick - list{ -webkit - transform: translate3d(0, 0, 0); -moz - transform: translate3d(0, 0, 0); -ms - transform: translate3d(0, 0, 0); -o - transform: translate3d(0, 0, 0); transform: translate3d(0, 0, 0); }.slick - track{ position: relative; top: 0; left: 0; display: block; }.slick - track: before,.slick - track: after{ display: table; content: ''; }.slick - track: after{ clear: both; }.slick - loading.slick - track{ visibility: hidden; }.slick - slide{ display: none; float: left; height: 100 %; min - height: 1px; } [dir = 'rtl'].slick - slide{ float: right; }.slick - slide img{ display: block; }.slick - slide.slick - loading img{ display: none; }.slick - slide.dragging img{ pointer - events: none; }.slick - initialized.slick - slide{ display: block; }.slick - loading.slick - slide{ visibility: hidden; }.slick - vertical.slick - slide{ display: block; height: auto; border: 1px solid transparent; }.slick - arrow.slick - hidden { display: none; }
+
+html { height: 100 %; }
+
+body{
+    min - height: 100 %;/*the BODY can resize accordin to it's content,but it will always b eat least the same height as the browser*/
+    box - sizing: border - box; /* you don't need this if your body doesn't have padding applied to it */
+}
+
+.affix { top: 20px; width: 100 %; }
+.affix + .container - fluid { padding - top: 70px; }
+
+.navbar{ background:#0055FF!important; border: none!important; border - radius: none!important; }
+.sub - header{
+    background:#0055FF; height: 40px; line - height: 40px; text - align: center; font - size: 20px; color: blue;
+    margin - top: -20px; z - index: 12!important;
+}
+.swipe - tab{
+    background:#0055FF; box - shadow: inset 0 0px 0 0 white; z - index: 11!important; cursor: pointer;
+    transition: 0.6s; transition - property: box - shadow;
+}
+.active - tab{ color: white; box - shadow: inset 0 - 5px 0 0 white; transform: box - shadow; }
+
+.navmenu{ z - index: 0!important; }
+.canvas{ z - index: 20!important; background: red!important; box - shadow: -25px 0px 20px rgba(0, 0, 0, 0.30); }
+
+.swipe - tabs - container{ background: white; }
+.swipe - tab - content{ padding: 5px; }
+.offcanvas - toggle{
+    float: left; width: 50px; height: 50px; padding - top: 7px;
+    font - size: 25px; color: white; background: transparent; border: none;
+}
+
+.navbar a{ color: white!important; }
+.navbar li.active{ background:#0055FF!important; }
+.navbar - inverse.navbar - nav >.active > a{ color: aqua!important; background - color: rgba(0, 0, 0, 0.15)!important; }
+.navbar - toggle: hover,.navbar - toggle: focus{ background: rgba(0, 0, 0, 0.15)!important }
+.navbar, navbar - inverse{ border: none!important; border - radius: none!important; }
+
+
+
+:: -webkit - scrollbar { width: 8px; height: 5px; }
+:: -webkit - scrollbar * { background: transparent; }
+:: -webkit - scrollbar - track {
+    background - image: none; background - position - x: none; background - position - y: none;
+    background - size: none; background - repeat - x: none; background - repeat - y: none; background - attachment: none;
+    background - origin: none; background - clip: none; background - color: none;
+}
+:: -webkit - scrollbar - thumb { background: rgba(0, 130, 255, 0.6); }
+:: -webkit - scrollbar - thumb: hover { background: rgba(0, 130, 255, 1); }
+:: -webkit - scrollbar - thumb: window - inactive { background: rgba(0, 130, 255, 0.4); }
+:: -webkit - scrollbar - button{ height: 20px; width: 20px; }
+:: -webkit - scrollbar - button: horizontal: increment,:: -webkit - scrollbar - button: horizontal: decrement,:: -webkit - scrollbar - button: vertical: increment,:: -webkit - scrollbar - button: vertical: decrement { background: rgba(0, 0, 0, 0.3) }
+:: -webkit - scrollbar - button: horizontal: increment,:: -webkit - scrollbar - button: horizontal: decrement,:: -webkit - scrollbar - button: vertical: increment,:: -webkit - scrollbar - button: vertical: decrement: hover { background: rgba(0, 0, 0, 0.7) }
+:: -webkit - scrollbar - track - piece { background: transparent }
+:: -webkit - scrollbar - corner { background: orange }
+:: -webkit - resizer { background: black }

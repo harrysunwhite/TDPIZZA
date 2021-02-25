@@ -3,7 +3,7 @@
 $(document).ready(
     function () {
     _getAll();
-});
+    });
 
 function _getAll() {
     $.ajax({
@@ -68,7 +68,11 @@ function _add() {
         dataType: "json",
         statusCode: {
             200: function () {
+                $('#NameNhom').val('');
+                $('#idNhom').val("ID");
                 _getAll();
+               
+                
                 $('#myModal').modal('hide');
             }
         },
@@ -93,7 +97,11 @@ function _edit() {
         dataType: "json",
         statusCode: {
             200: function () {
+                $('#NameNhom').val('');
+                $('#idNhom').val("ID");
                 _getAll();
+               
+
                 $('#myModal').modal('hide');
             },
             error: function (errormessage) {

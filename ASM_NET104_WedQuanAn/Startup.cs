@@ -73,7 +73,7 @@ namespace ASM_NET104_WedQuanAn
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Thucdons}/{action=Category}/{id?}");
+                    pattern: "{controller=Admin}/{action=index}/{id?}");
             });
         }
     }

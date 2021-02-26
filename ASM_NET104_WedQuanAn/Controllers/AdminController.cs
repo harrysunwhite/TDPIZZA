@@ -92,7 +92,7 @@ namespace ASM_NET104_WedQuanAn.Controllers
                 return NotFound();
             }
 
-            Console.WriteLine(thucDon.Hinh);
+          
             if (ModelState.IsValid)
             {
                 try

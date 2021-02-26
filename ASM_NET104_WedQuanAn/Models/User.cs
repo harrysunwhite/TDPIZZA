@@ -10,5 +10,6 @@ namespace ASM_NET104_WedQuanAn.Models
        public string UserEmail { get; set; }
         public string Pass { get; set; }
         public int Role { get; set; }
+        
     }
 }

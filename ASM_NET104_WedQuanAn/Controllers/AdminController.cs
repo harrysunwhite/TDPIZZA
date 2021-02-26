@@ -40,15 +40,23 @@ namespace ASM_NET104_WedQuanAn.Controllers
         {
             if (ModelState.IsValid)
             {
-                string rootpath = _hostEnvironment.WebRootPath;
-                string fileName = Path.GetFileNameWithoutExtension(thucDon.ImageFile.FileName);
-                string ext = Path.GetExtension(thucDon.ImageFile.FileName);
-                thucDon.Hinh = fileName = thucDon.MaTd + DateTime.Now.ToString("ddmmyyyy") + ext;
-                string path = Path.Combine(rootpath + "/img/", fileName);
-                using (var fs = new FileStream(path, FileMode.Create))
+                if(thucDon.ImageFile is null)
                 {
-                    await thucDon.ImageFile.CopyToAsync(fs);
-                }
+                    thucDon.Hinh = "unchose.jpg";
+                }    
+                else
+                {
+                    string rootpath = _hostEnvironment.WebRootPath;
+                    string fileName = Path.GetFileNameWithoutExtension(thucDon.ImageFile.FileName);
+                    string ext = Path.GetExtension(thucDon.ImageFile.FileName);
+                    thucDon.Hinh = fileName = thucDon.MaTd + DateTime.Now.ToString("ddmmyyyy") + ext;
+                    string path = Path.Combine(rootpath + "/img/", fileName);
+                    using (var fs = new FileStream(path, FileMode.Create))
+                    {
+                        await thucDon.ImageFile.CopyToAsync(fs);
+                    }
+                }    
+               
                 _context.Add(thucDon);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -75,6 +83,8 @@ namespace ASM_NET104_WedQuanAn.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("/edit/{id}")]
+        [Route("/admin/edit/{id}")]
         public async Task<IActionResult> Edit(int id, [Bind("MaTd,TenTd,MoTa,Hinh,ImageFile,Nhom,Price")] ThucDon thucDon)
         {
             if (id != thucDon.MaTd)

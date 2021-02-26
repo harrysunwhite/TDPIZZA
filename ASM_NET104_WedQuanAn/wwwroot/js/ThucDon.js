@@ -65,7 +65,7 @@ function _getByTDId(id) {
 }
 
 function _deleteTD(id) {
-    var cf = confirm('Are you sure want to permanently delete this row?');
+    var cf = confirm('Bạn muốn xoá thực đơn này?');
     if (cf) {
         $.ajax({
             url: '/api/ThucDon/' + id,

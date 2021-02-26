@@ -111,7 +111,7 @@ function _edit() {
     });
 }
 function _delete(id) {
-    var cf = confirm('Are you sure want to permanently delete this row?');
+    var cf = confirm('Bạn muốn xoá nhóm thực đơn này?');
     if (cf) {
         $.ajax({
             url: '/api/Nhom/' + id,

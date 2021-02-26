@@ -7,95 +7,141 @@
 
 
 
-
-
-
-<h1>Thực Đơn</h1>
-
-<p>
-    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal1">
-        Create
-    </button>
-    <hr />
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Tên món
-            </th>
-           
-            <th>
-                Hình Ảnh
-            </th>
-            <th>
-                Giá Bán
-            </th>
-            <th>
-               Nhóm
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            var result = from p in (ViewData["All"] as IEnumerable<ThucDon>)
-                         group p by p.Nhom into g
-                         select new GroupTD { MaNhom = "a" + g.Key.ToString(), ThucDons = g.ToList() };
-        }
-        @foreach (var group in result)
-        {
-            foreach (var item in group.ThucDons)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TenTd)
-                    </td>
-                    
-                    <td>
-                        <img src="~/img/@item.Hinh" width="200" height="200"/>
-                    </td>
-                    <td>
-                        @item.Price?.ToString("n0").Replace(',', '.') VND
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NhomNavigation.TenNhom)
-                    </td>
-                    <td>
-                        <a class="btn btn-secondary btn-lg active" onclick=" return _getByTDId(@item.MaTd )">Edit</a>
-                        |
-                        <a class="btn btn-secondary btn-lg active" onclick=" return _deleteTD(@item.MaTd )">Delete</a>
-                    </td>
-                </tr>
-            }
-
-        }
-    </tbody>
-</table>
-<hr />
-
-<h1>Nhóm</h1>
-<p>
-    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-        Create
-    </button>
-</p>
-<div id="list">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Mã nhóm
-                </th>
-                <th>
-                    Tên Nhóm
-                </th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody class="tbody"></tbody>
-    </table>
+<div class="sidebar-container">
+    <div class="sidebar-logo">
+        ADMIN TDPIZZA
+    </div>
+    <ul class="sidebar-navigation">
+        <li class="header">Navigation</li>
+        <li>
+            <a href="#" id="btQLTD">
+                <i class="fa fa-home" aria-hidden="true"></i> Quản lý thực đơn
+            </a>
+        </li>
+        <li>
+            <a href="#" id="btQLN">
+                <i class="fa fa-tachometer" aria-hidden="true"></i> Quản lý nhóm thực đơn
+            </a>
+        </li>
+        <li class="header">Khác</li>
+        <li>
+            <a href="#">
+                <i class="fa fa-users" aria-hidden="true"></i> Cài đặt trang web
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fa fa-cog" aria-hidden="true"></i> Thống kê
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fa fa-info-circle" aria-hidden="true"></i> Liên hệ nhà phát triển
+            </a>
+        </li>
+    </ul>
 </div>
+
+<div class="content-container">
+
+    <div class="container-fluid">
+        <div class="content" id="ctThucDon">
+            <h1>Thực Đơn</h1>
+
+            <p>
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal1">
+                    Create
+                </button>
+                <hr />
+            </p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Tên món
+                        </th>
+
+                        <th>
+                            Hình Ảnh
+                        </th>
+                        <th>
+                            Giá Bán
+                        </th>
+                        <th>
+                            Nhóm
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var result = from p in (ViewData["All"] as IEnumerable<ThucDon>)
+                                     group p by p.Nhom into g
+                                     select new GroupTD { MaNhom = "a" + g.Key.ToString(), ThucDons = g.ToList() };
+                    }
+                    @foreach (var group in result)
+                    {
+                        foreach (var item in group.ThucDons)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TenTd)
+                                </td>
+
+                                <td>
+                                    <img src="~/img/@item.Hinh" width="200" height="200" />
+                                </td>
+                                <td>
+                                    @item.Price?.ToString("n0").Replace(',', '.') VND
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NhomNavigation.TenNhom)
+                                </td>
+                                <td>
+                                    <a class="btn btn-secondary btn-lg active" onclick=" return _getByTDId(@item.MaTd )">Edit</a>
+                                    |
+                                    <a class="btn btn-secondary btn-lg active" onclick=" return _deleteTD(@item.MaTd )">Delete</a>
+                                </td>
+                            </tr>
+                        }
+
+                    }
+                </tbody>
+            </table>
+            <hr />
+
+        </div>
+        <div class="content" id="ctNhom">
+            <h1>Nhóm</h1>
+            <p>
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+                    Create
+                </button>
+            </p>
+            <div id="list">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Mã nhóm
+                            </th>
+                            <th>
+                                Tên Nhóm
+                            </th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tbody"></tbody>
+                </table>
+            </div>
+        </div>
+       
+
+    </div>
+</div>
+
+
+
 
 <!-- Modal Nhóm -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -112,9 +158,9 @@
                         <input type="text" class="form-control" id="idNhom" placeholder="ID" value="ID" readonly>
                     </div>
                     <div class="form-group">
-                            <label for="Name">Tên Nhóm</label>
-                            <input type="text" class="form-control" id="NameNhom" placeholder="Name" required>
-                        </div>
+                        <label for="Name">Tên Nhóm</label>
+                        <input type="text" class="form-control" id="NameNhom" placeholder="Name" required>
+                    </div>
 
 
                 </form>
@@ -134,9 +180,9 @@
                 <h4 class="modal-title" id="myModalLabel">Nhóm</h4>
             </div>
             <div class="modal-body">
-                <form asp-action="Create" enctype="multipart/form-data" id="formTD"  runat="server">
+                <form asp-action="Create" enctype="multipart/form-data" id="formTD" runat="server">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                  
+
                     <div class="form-group">
                         <label for="Tentd" class="control-label">Tên Món</label>
                         <input asp-for="TenTd" class="form-control" />
@@ -151,16 +197,16 @@
                         <label for="ImageFile" class="control-label">Hình Ảnh</label>
                         <br />
                         <img src="~/images/unchose.jpg" id="imgTD" width="200" height="200" />
-                        <input asp-for="ImageFile"  accept="image/*" />
+                        <input asp-for="ImageFile" accept="image/*" />
 
                     </div>
                     <div class="form-group">
                         <label for="Nhom" class="control-label">Nhóm</label>
-                        <select asp-for="Nhom" class="form-control" asp-items="ViewBag.DATA" ></select>
+                        <select asp-for="Nhom" class="form-control" asp-items="ViewBag.DATA"></select>
                     </div>
                     <div class="form-group">
                         <label for="Price" class="control-label">Giá</label>
-                        <input asp-for="Price" class="form-control"/>
+                        <input asp-for="Price" class="form-control" />
                         <span asp-validation-for="Price" class="text-danger"></span>
                     </div>
 
@@ -168,7 +214,7 @@
             </div>
             <div class="modal-footer">
                 <button type="submit" form="formTD" class="btn btn-primary" id="btnAddTD">Add</button>
-               
+
             </div>
         </div>
     </div>
@@ -187,7 +233,7 @@
                     <div class="form-group">
                         <label for="MaTd" class="control-label">Mã Thực đơn</label>
                         <input asp-for="MaTd" class="form-control" id="MaTD" readonly />
-                        
+
                     </div>
 
                     <div class="form-group">
@@ -200,9 +246,14 @@
                         <input asp-for="MoTa" class="form-control" id="MoTaTD" />
                         <span asp-validation-for="MoTa" class="text-danger"></span>
                     </div>
-
                     <div class="form-group">
-                        <label asp-for="ImageFile" class="control-label"></label>
+
+
+                        <input asp-for="Hinh" id="HinhTD" hidden />
+
+                    </div>
+                    <div class="form-group">
+                        <label for="ImageFile" class="control-label">Hình</label>
                         <br />
                         <img src="~/images/unchose.jpg" id="imgTDu" width="200" height="200" />
                         <input asp-for="ImageFile" accept="image/*" id="imgfileu" />
@@ -221,7 +272,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                
+
                 <button type="submit" form="formEdit" class="btn btn-primary" id="btnUpdateTD">Update</button>
             </div>
         </div>
@@ -230,6 +281,6 @@
 
 @section Scripts {
 
-   
+
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

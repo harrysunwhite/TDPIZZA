@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
+#nullable disable
 
 namespace ASM_NET104_WedQuanAn.Models
 {
-    public class User
+    public partial class User
     {
-       public string UserEmail { get; set; }
+        public string UserEmail { get; set; }
         public string Pass { get; set; }
         public int Role { get; set; }
-        
     }
 }

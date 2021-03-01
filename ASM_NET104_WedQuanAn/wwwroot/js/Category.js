@@ -60,5 +60,3 @@ function handleClick(e) {
 window.addEventListener('load', initialHightlightLocation);
 window.addEventListener('resize', initialHightlightLocation);
 buttons.forEach(button => button.addEventListener('click', handleClick));
-
-

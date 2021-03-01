@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
+#nullable disable
 
 namespace ASM_NET104_WedQuanAn.Models
 {
-    public class CartItem
+    public partial class CartItem
     {
-        public int quantity { set; get; }
-        public ThucDon thucdon { set; get; }
+        public int Id { get; set; }
+        public int MaTd { get; set; }
+        public int? SoLuong { get; set; }
+
+        public virtual Cart IdNavigation { get; set; }
+        public virtual ThucDon MaTdNavigation { get; set; }
     }
 }

@@ -1,0 +1,99 @@
+﻿@model List<ASM_NET104_WedQuanAn.Models.CartIteamModel>
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@inject IHttpContextAccessor HttpContextAccessor
+
+<h2>GIỎ HÀNG</h2>
+
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">GIỎ HÀNG</h4>
+        </div>
+        <div class="modal-body">
+            @{
+                var session = HttpContextAccessor.HttpContext.Session;
+                string jsoncart = session.GetString(ASM_NET104_WedQuanAn.Controllers.CartController.CARTKEY);
+                if (jsoncart != null)
+                {
+                    decimal? total = 0;
+                    int stt = 1;
+                    var cart = JsonConvert.DeserializeObject<List<CartIteamModel>>(jsoncart);
+                    <table class="table">
+                        <tr>
+                            <th>#</th>
+                            <th>Sản phẩm</th>
+                            <th>Giá</th>
+                            <th>Số lượng</th>
+                            <th>Thành tiền</th>
+                            <th></th>
+                        </tr>
+                        @foreach (var cartitem in cart)
+                        {
+                            var thanhtien = cartitem.Quantity * cartitem.thucDon.Price;
+                            total += thanhtien;
+
+                            <tr>
+                                <td>@(stt++)</td>
+                                <td>@cartitem.thucDon.TenTd</td>
+                                <td>@(cartitem.thucDon.Price?.ToString("n0"))</td>
+                                <td><input asp-for="@cartitem.Quantity" id="@($"quantity-{cartitem.thucDon.MaTd}")" /></td>
+                                <td>@(thanhtien?.ToString("n0"))</td>
+                                <td>
+                                    <button class="btn btn-success updatecartitem"
+                                            data-productid="@cartitem.thucDon.MaTd">
+                                        Cập nhật
+                                    </button>
+                                    <a asp-route="removecart" asp-route-productid="@cartitem.thucDon.MaTd"
+                                       class="btn btn-danger">Xóa</a>
+                                </td>
+                            </tr>
+                        }
+                        <tr>
+                            <td colspan="4" class="text-right">Tổng tiền</td>
+                            <td>@(total?.ToString("n0"))</td>
+                            <td></td>
+                        </tr>
+                    </table>
+
+                }
+                else
+                {
+                    <p class="alert alert-danger">Giỏ hàng trống</p>
+                }
+            }
+
+        </div>
+        <div class="modal-footer">
+            <a asp-controller="Product" asp-action="Checkout" class="btn btn-success">Checkout</a>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script>
+          $(document).ready(function () {
+              $(".updatecartitem").click(function (event) {
+                  event.preventDefault();
+                  var productid = $(this).attr("data-productid");
+                  var quantity = $("#quantity-" + productid).val();
+                  $.ajax({
+                      type: "POST",
+                      url:"@Url.RouteUrl("updatecart")",
+                      data: {
+                          productid: productid,
+                          quantity:quantity
+                      },
+                      success: function (result) {
+                          window.location.href = "@Url.RouteUrl("cart")";
+                          _getCount();
+                      }
+                  });
+              });
+          });
+    </script>
+}

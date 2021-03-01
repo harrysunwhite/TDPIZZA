@@ -23,36 +23,35 @@
 
                 @{
                     <div class="menu menu--is-visible" id="all">
-                        @foreach(var group in result)
+                        @foreach (var group in result)
                         {
-                            foreach(var td in group.ThucDons)
+                            foreach (var td in group.ThucDons)
                             {
                                 <div class="item row align-items-center">
-                                <div class="col-sm-3 pr-5">
-                                    <img class="product-img" src="~/img/@td.Hinh" id="id+@td.Hinh">
-                                </div>
-                                <div class="details col-sm-9">
-                                    <div class="item__header">
-                                        <h3 class="item__title">@td.TenTd</h3>
-                                        <span class="item__dots"></span>
-                                        <span class="item__price">@td.Price?.ToString("n0").Replace(',', '.') VND</span>
+                                    <div class="col-sm-3 pr-5">
+                                        <img class="product-img" src="~/img/@td.Hinh" id="id+@td.Hinh">
                                     </div>
-                                    <p class="item__description">
-                                        @td.MoTa
-                                    </p>
-                                    <button class="btn btn-sm btn-outline-primary my-cart-btn"
-                                            data-id="@td.MaTd" data-name="@td.TenTd" data-price="@td.Price" data-quantity="1"
-                                            data-image="./img/@td.Hinh">
-                                        Add to cart
-                                    </button>
-                                    @*<a asp-route="addcart"
-                                        asp-route-productid="@td.MaTd"
-                                        class="btn btn-secondary btn-sm float-right">Đặt hàng</a>*@
+                                    <div class="details col-sm-9">
+                                        <div class="item__header">
+                                            <h3 class="item__title">@td.TenTd</h3>
+                                            <span class="item__dots"></span>
+                                            <span class="item__price">@td.Price?.ToString("n0").Replace(',', '.') VND</span>
+                                        </div>
+                                        <p class="item__description">
+                                            @td.MoTa
+                                        </p>
+                                        <button class="btn btn-sm btn-outline-primary my-cart-btn"
+                                                onclick="addcart(@td.MaTd)">
+                                            Add to cart
+                                        </button>
+                                        @*<a asp-route="addcart"
+                                            asp-route-productid="@td.MaTd"
+                                            class="btn btn-secondary btn-sm float-right">Đặt hàng</a>*@
+                                    </div>
                                 </div>
-                            </div>
                             }
                         }
-                       
+
 
                     </div>
 
@@ -78,8 +77,7 @@
                                             @td.MoTa
                                         </p>
                                         <button class="btn btn-sm btn-outline-primary my-cart-btn"
-                                                data-id="@td.MaTd" data-name="@td.TenTd" data-price="@td.Price" data-quantity="1"
-                                                data-image="@td.Hinh">
+                                                onclick="addcart(@td.MaTd)">
                                             Add to cart
                                         </button>
                                         @*<a asp-route="addcart"
@@ -107,19 +105,81 @@
         </section>
     </div>
 </div>
-<div class="nav-item my-cart-icon">
-    <img src="~/img/cart.svg" style="width:20px;"> <span class="badge badge-notify my-cart-badge"> </span>
-</div>
-@*<script>
-        function displaydom(x) {
-            var all = document.getElementsByClassName("menu--is-visible")
-            var l = all.length;
-            alert(l);
-            for (i = i; i < l; i++) {
-                all[i].style.display = "None";
-            }
+<a class="nav-item my-cart-icon" data-toggle="modal" data-target="#myModal">
 
-           var dom = document.getElementById("a" + x);
-            dom.style.display ="Block"
-        }
-    </script>*@
+    <img src="~/img/cart.svg" style="width:20px;">
+    <span class="badge badge-notify my-cart-badge"></span>
+</a>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    
+</div>
+
+<script>
+
+    $(document).ready(
+        function () {
+            _getCount();
+            $('#myModal').load('@Url.Action("Cart", "Cart")');
+
+
+        });
+
+
+
+
+
+    function _getCount() {
+        $.ajax({
+            type: 'GET',
+            url: '/countcart',
+            success: function (result) {
+                $('.my-cart-badge').html(result)
+            }
+        });
+    }
+    function addcart(id) {
+
+            $.ajax({
+                url: '/addcart/' + id,
+                type: "Get",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: true,
+                statusCode: {
+                    200: function () {
+                        _getCount();
+                        $('#myModal').load('@Url.Action("Cart", "Cart")');
+                    }
+                }
+
+
+
+
+            });
+    }
+
+    function remove(id) {
+        
+            $.ajax({
+                url: '/removecart/' + id,
+                type: "Get",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: true,
+                statusCode: {
+                    200: function () {
+                        _getCount();
+                        $('#myModal').load('@Url.Action("Cart", "Cart")');
+                    }
+                }
+
+
+
+
+            });
+    }
+
+
+
+</script>

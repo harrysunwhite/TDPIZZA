@@ -1,0 +1,96 @@
+﻿@model List<ASM_NET104_WedQuanAn.Models.CartIteamModel>
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@inject IHttpContextAccessor HttpContextAccessor
+
+<h2>GIỎ HÀNG</h2>
+
+
+<div class="modal-dialog">
+    <div class="modal-content" style="width:600px">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">GIỎ HÀNG</h4>
+        </div>
+        <div class="modal-body">
+            @{
+                var session = HttpContextAccessor.HttpContext.Session;
+                string jsoncart = session.GetString(ASM_NET104_WedQuanAn.Controllers.CartController.CARTKEY);
+                List<CartIteamModel> cart = JsonConvert.DeserializeObject<List<CartIteamModel>>(jsoncart);
+                if (jsoncart != null)
+                {
+                    decimal? total = 0;
+                    int stt = 1;
+
+                    if (cart.Count > 0)
+                    {
+                        <table class="table">
+                            <tr>
+                                <th>#</th>
+                                <th>Sản phẩm</th>
+                                <th>Giá</th>
+                                <th>Số lượng</th>
+                                <th>Thành tiền</th>
+                                <th></th>
+                            </tr>
+                            @foreach (var cartitem in cart)
+                            {
+                                var thanhtien = cartitem.Quantity * cartitem.thucDon.Price;
+                                total += thanhtien;
+
+                                <tr>
+                                    <td>@(stt++)</td>
+                                    <td>@cartitem.thucDon.TenTd</td>
+                                    <td>@(cartitem.thucDon.Price?.ToString("n0"))</td>
+                                    <td>@cartitem.Quantity</td>
+                                    <td>@(thanhtien?.ToString("n0"))</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary my-cart-btn"
+                                                onclick="remove(@cartitem.thucDon.MaTd)">
+                                            Xoá
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td colspan="4" class="text-right">Tổng tiền</td>
+                                <td>@(total?.ToString("n0"))</td>
+                                <td></td>
+                            </tr>
+                        </table>
+
+                    }
+                    else
+                    {
+                        <p class="alert alert-danger">Giỏ hàng trống</p>
+                    }
+
+                }
+                else
+                {
+                    <p class="alert alert-danger">Giỏ hàng trống</p>
+                }
+            }
+
+        </div>
+        <div class="modal-footer">
+            @if (cart.Count > 0)
+            {
+                <a asp-controller="Product" asp-action="Checkout" class="btn btn-success">Checkout</a>
+            }
+            else
+            {
+                <a class="btn btn-success">Checkout</a>
+            }
+
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script>
+         
+    </script>
+}

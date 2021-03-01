@@ -17,7 +17,8 @@ namespace ASM_NET104_WedQuanAn.Models
         {
         }
 
-        public virtual DbSet<CartDetail> CartDetails { get; set; }
+        public virtual DbSet<Cart> Carts { get; set; }
+        public virtual DbSet<CartItem> CartItems { get; set; }
         public virtual DbSet<Nhom> Nhoms { get; set; }
         public virtual DbSet<ThucDon> ThucDons { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -25,8 +26,7 @@ namespace ASM_NET104_WedQuanAn.Models
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
-            {
-
+            { 
             }
         }
 
@@ -34,13 +34,57 @@ namespace ASM_NET104_WedQuanAn.Models
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
-            modelBuilder.Entity<CartDetail>(entity =>
+            modelBuilder.Entity<Cart>(entity =>
             {
-                entity.HasNoKey();
+                entity.ToTable("Cart");
 
-                entity.ToTable("CartDetail");
+                entity.Property(e => e.Id)
+                    .ValueGeneratedNever()
+                    .HasColumnName("ID");
 
-                entity.Property(e => e.Sl).HasColumnName("SL");
+                entity.Property(e => e.DiaChiKh)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnName("DiaChiKH");
+
+                entity.Property(e => e.EmailKh)
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("EmailKH");
+
+                entity.Property(e => e.Sdtkh)
+                    .IsRequired()
+                    .HasMaxLength(15)
+                    .IsUnicode(false)
+                    .HasColumnName("SDTKH");
+
+                entity.Property(e => e.Tenkh)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnName("TENKH");
+            });
+
+            modelBuilder.Entity<CartItem>(entity =>
+            {
+                entity.HasKey(e => new { e.Id, e.MaTd });
+
+                entity.ToTable("CartItem");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.MaTd).HasColumnName("MaTD");
+
+                entity.HasOne(d => d.IdNavigation)
+                    .WithMany(p => p.CartItems)
+                    .HasForeignKey(d => d.Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_ct_hang");
+
+                entity.HasOne(d => d.MaTdNavigation)
+                    .WithMany(p => p.CartItems)
+                    .HasForeignKey(d => d.MaTd)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_ct_td");
             });
 
             modelBuilder.Entity<Nhom>(entity =>

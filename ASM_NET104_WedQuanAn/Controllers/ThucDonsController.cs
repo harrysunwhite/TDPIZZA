@@ -28,7 +28,8 @@ namespace ASM_NET104_WedQuanAn.Controllers
             var aSMFINALContext = _context.ThucDons.Include(t => t.NhomNavigation);
             return View(await aSMFINALContext.ToListAsync());
         }
-
+        [Route("")]
+        [Route("/index")]
         public IActionResult Category()
         {
             ViewData["Nhom"] = _context.Nhoms;
@@ -219,74 +220,8 @@ namespace ASM_NET104_WedQuanAn.Controllers
             session.SetString(CARTKEY, jsoncart);
         }
 
-        [Route("addcart/{productid:int}", Name = "addcart")]
-        public IActionResult AddToCart([FromRoute] int productid)
-        {
-
-            var product = _context.ThucDons
-                .Where(p => p.MaTd == productid)
-                .FirstOrDefault();
-            if (product == null)
-                return NotFound("Không có sản phẩm");
-
-            // Xử lý đưa vào Cart ...
-            var cart = GetCartItems();
-            var cartitem = cart.Find(p => p.thucdon.MaTd == productid);
-            if (cartitem != null)
-            {
-                // Đã tồn tại, tăng thêm 1
-                cartitem.quantity++;
-            }
-            else
-            {
-                //  Thêm mới
-                cart.Add(new CartItem() { quantity = 1, thucdon = product });
-            }
-
-            // Lưu cart vào Session
-            SaveCartSession(cart);
-            // Chuyển đến trang hiện thị Cart
-            return RedirectToAction(nameof(Cart));
-        }
-
-        [Route("/cart", Name = "cart")]
-        public IActionResult Cart()
-        {
-            return View(GetCartItems());
-        }
-
-        [Route("/updatecart", Name = "updatecart")]
-        [HttpPost]
-        public IActionResult UpdateCart([FromForm] int productid, [FromForm] int quantity)
-        {
-            // Cập nhật Cart thay đổi số lượng quantity ...
-            var cart = GetCartItems();
-            var cartitem = cart.Find(p => p.thucdon.MaTd == productid);
-            if (cartitem != null)
-            {
-                // Đã tồn tại, tăng thêm 1
-                cartitem.quantity = quantity;
-            }
-            SaveCartSession(cart);
-            // Trả về mã thành công (không có nội dung gì - chỉ để Ajax gọi)
-            return Ok();
-        }
-
-        /// xóa item trong cart
-        [Route("/removecart/{productid:int}", Name = "removecart")]
-        public IActionResult RemoveCart([FromRoute] int productid)
-        {
-            var cart = GetCartItems();
-            var cartitem = cart.Find(p => p.thucdon.MaTd == productid);
-            if (cartitem != null)
-            {
-                // Đã tồn tại, tăng thêm 1
-                cart.Remove(cartitem);
-            }
-
-            SaveCartSession(cart);
-            return RedirectToAction(nameof(Cart));
-        }
+      
+      
 
     }
 }

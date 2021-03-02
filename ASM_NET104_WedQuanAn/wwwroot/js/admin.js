@@ -36,7 +36,7 @@
 function load() {
 
     //$('#ctListCart').load('@Url.Action("GetListCart", "admin")');
-    $('#ctNhom').fadeOut();
+    $('.content').fadeOut();
 
     $('#ctThucDon').fadeIn();
 }

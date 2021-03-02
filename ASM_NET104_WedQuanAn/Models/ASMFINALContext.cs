@@ -51,7 +51,7 @@ namespace ASM_NET104_WedQuanAn.Models
                     .HasMaxLength(100)
                     .IsUnicode(false)
                     .HasColumnName("EmailKH");
-
+                entity.Property(e => e.NgayHD).HasColumnType("Date").IsRequired().HasColumnName("NgayHD");
                 entity.Property(e => e.Sdtkh)
                     .IsRequired()
                     .HasMaxLength(15)

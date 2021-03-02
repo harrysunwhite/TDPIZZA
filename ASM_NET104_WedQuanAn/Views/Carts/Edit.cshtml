@@ -1,11 +1,17 @@
 ﻿@model ASM_NET104_WedQuanAn.Models.Cart
 
 @{
-    ViewData["Title"] = "Edit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
 }
 
-<h1>Edit</h1>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+</head>
+<body>
 
 <h4>Cart</h4>
 <hr />
@@ -30,6 +36,11 @@
                 <span asp-validation-for="Tenkh" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="NgayHD" class="control-label"></label>
+                <input asp-for="NgayHD" class="form-control" />
+                <span asp-validation-for="NgayHD" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="EmailKh" class="control-label"></label>
                 <input asp-for="EmailKh" class="form-control" />
                 <span asp-validation-for="EmailKh" class="text-danger"></span>
@@ -48,3 +59,5 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+</body>
+</html>

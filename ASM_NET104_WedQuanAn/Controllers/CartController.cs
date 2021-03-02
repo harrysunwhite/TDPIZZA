@@ -138,6 +138,7 @@ namespace ASM_NET104_WedQuanAn.Controllers
         {
             if (ModelState.IsValid)
             {
+                cart.NgayHD = DateTime.Now;
                 cart.Id = _context.Carts.Count()+1;
                 _context.Add(cart);
                 await _context.SaveChangesAsync();

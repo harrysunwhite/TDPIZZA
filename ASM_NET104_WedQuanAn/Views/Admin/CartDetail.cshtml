@@ -1,0 +1,56 @@
+﻿
+
+
+@model IEnumerable<CartIteamModel>
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@inject IHttpContextAccessor HttpContextAccessor
+
+
+
+
+
+            @{ decimal? total = 0;
+                int stt = 1;
+
+
+    <table class="table">
+        <tr>
+            <th>#</th>
+            <th>Sản phẩm</th>
+            <th>Giá</th>
+            <th>Số lượng</th>
+            <th>Thành tiền</th>
+            <th></th>
+        </tr>
+        @foreach (var cartitem in Model as IEnumerable<CartIteamModel>)
+        {
+            var thanhtien = cartitem.Quantity * cartitem.thucDon.Price;
+            total += thanhtien;
+
+<tr>
+    <td>@(stt++)</td>
+    <td>@cartitem.thucDon.TenTd</td>
+    <td>@(cartitem.thucDon.Price?.ToString("n0").Replace(",", "."))VND</td>
+    <td>@cartitem.Quantity</td>
+    <td>@(thanhtien?.ToString("n0").Replace(",", "."))  VND</td>
+    
+</tr>
+}
+        <tr>
+            <td colspan="4" class="text-right">Tổng tiền</td>
+            <td><string>@(total?.ToString("n0").Replace(",", "."))  VND</string></td>
+            <td></td>
+        </tr>
+    </table> }
+
+
+  
+
+
+
+@section Scripts {
+    <script>
+        
+    </script>
+}

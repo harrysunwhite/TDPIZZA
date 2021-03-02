@@ -1,11 +1,17 @@
 ﻿@model ASM_NET104_WedQuanAn.Models.Cart
 
 @{
-    ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
 }
 
-<h1>Details</h1>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
 
 <div>
     <h4>Cart</h4>
@@ -30,6 +36,12 @@
             @Html.DisplayFor(model => model.Tenkh)
         </dd>
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NgayHD)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NgayHD)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.EmailKh)
         </dt>
         <dd class = "col-sm-10">
@@ -41,3 +53,5 @@
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+</body>
+</html>

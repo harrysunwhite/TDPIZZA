@@ -9,22 +9,24 @@ using ASM_NET104_WedQuanAn.Models;
 
 namespace ASM_NET104_WedQuanAn.Controllers
 {
-    public class CartsFinalController : Controller
+    public class CartsController : Controller
     {
         private readonly ASMFINALContext _context;
 
-        public CartsFinalController(ASMFINALContext context)
+        public CartsController(ASMFINALContext context)
         {
             _context = context;
         }
 
-        // GET: CartsFinal
-        public async Task<IActionResult> Index()
+        // GET: Carts
+        public IActionResult Index()
         {
-            return View(await _context.Carts.ToListAsync());
+            var carts = _context.Carts.ToListAsync();
+
+            return  PartialView("_ListCart",carts);
         }
 
-        // GET: CartsFinal/Details/5
+        // GET: Carts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -42,18 +44,18 @@ namespace ASM_NET104_WedQuanAn.Controllers
             return View(cart);
         }
 
-        // GET: CartsFinal/Create
+        // GET: Carts/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: CartsFinal/Create
+        // POST: Carts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Sdtkh,DiaChiKh,Tenkh,EmailKh")] Cart cart)
+        public async Task<IActionResult> Create([Bind("Id,Sdtkh,DiaChiKh,Tenkh,NgayHD,EmailKh")] Cart cart)
         {
             if (ModelState.IsValid)
             {
@@ -61,10 +63,10 @@ namespace ASM_NET104_WedQuanAn.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View("~/Views/");
+            return View(cart);
         }
 
-        // GET: CartsFinal/Edit/5
+        // GET: Carts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,12 +82,12 @@ namespace ASM_NET104_WedQuanAn.Controllers
             return View(cart);
         }
 
-        // POST: CartsFinal/Edit/5
+        // POST: Carts/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Sdtkh,DiaChiKh,Tenkh,EmailKh")] Cart cart)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Sdtkh,DiaChiKh,Tenkh,NgayHD,EmailKh")] Cart cart)
         {
             if (id != cart.Id)
             {
@@ -115,7 +117,7 @@ namespace ASM_NET104_WedQuanAn.Controllers
             return View(cart);
         }
 
-        // GET: CartsFinal/Delete/5
+        // GET: Carts/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -133,7 +135,7 @@ namespace ASM_NET104_WedQuanAn.Controllers
             return View(cart);
         }
 
-        // POST: CartsFinal/Delete/5
+        // POST: Carts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

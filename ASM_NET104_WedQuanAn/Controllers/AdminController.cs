@@ -36,6 +36,7 @@ namespace ASM_NET104_WedQuanAn.Controllers
                 ViewData["All"] = _context.ThucDons.ToList();
                 ViewData["DATA"] = new SelectList(_context.Nhoms, "MaNhom", "TenNhom");
                 ViewData["User"] = _context.Users.ToList();
+                ViewData["ListCart"] = _context.Carts.ToList();
 
 
                 return View();
@@ -212,6 +213,35 @@ namespace ASM_NET104_WedQuanAn.Controllers
         {
             HttpContext.Session.Remove("userLogin");
             return RedirectToAction("login", "admin");
+        }
+
+        public IActionResult GetListCart()
+        {
+            ViewData["ListCart"] = _context.Carts.ToList();
+
+            return PartialView("_GetListCart");
+        }
+
+
+
+        public IActionResult CartDetail(int id)
+        {
+            if(UserLogin()!=null)
+            {
+                var listTD = from cart in _context.CartItems
+                             join td in _context.ThucDons
+            on cart.MaTd equals td.MaTd
+                             where cart.Id == id
+                             select new CartIteamModel { Quantity = int.Parse(cart.SoLuong.ToString()), thucDon = new ThucDon() { TenTd = td.TenTd, Price = td.Price, Hinh = td.Hinh } };
+                return PartialView("CartDetail", listTD);
+            }
+           
+             else
+            {
+                ViewBag.Javascript = "Please login";
+                return View("login");
+            }
+
         }
 
         // GET: Users

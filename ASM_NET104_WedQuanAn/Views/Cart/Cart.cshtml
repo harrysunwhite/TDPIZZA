@@ -1,61 +1,343 @@
-﻿@model List<ASM_NET104_WedQuanAn.Models.CartIteamModel>
+﻿@model ASM_NET104_WedQuanAn.Models.Cart
 @using Microsoft.AspNetCore.Http
 @using Newtonsoft.Json
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @inject IHttpContextAccessor HttpContextAccessor
 
 
+@{
+    ViewData["Title"] = "Thông tin giỏ hàng";
+    Layout = "~/Views/Shared/_content.cshtml";
+}
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<style>
 
 
-            @{
-                var session = HttpContextAccessor.HttpContext.Session;
-                string jsoncart = session.GetString(ASM_NET104_WedQuanAn.Controllers.CartController.CARTKEY);
-                if (jsoncart != null)
-                {
-                    decimal? total = 0;
-                    int stt = 1;
-                    var cart = JsonConvert.DeserializeObject<List<CartIteamModel>>(jsoncart);
-                    <table class="table">
-                        <tr>
-                            <th>#</th>
-                            <th>Sản phẩm</th>
-                            <th>Giá</th>
-                            <th>Số lượng</th>
-                            <th>Thành tiền</th>
-                            <th></th>
-                        </tr>
-                        @foreach (var cartitem in cart)
-                        {
-                            var thanhtien = cartitem.Quantity * cartitem.thucDon.Price;
-                            total += thanhtien;
+    /* sign in FORM */
+    #logreg-forms {
+        width: 412px;
+        margin: 10vh auto;
+        background-color: #f3f3f3;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    }
 
-                            <tr>
-                                <td>@(stt++)</td>
-                                <td>@cartitem.thucDon.TenTd</td>
-                                <td>@(cartitem.thucDon.Price?.ToString("n0"))</td>
-                                <td><input asp-for="@cartitem.Quantity" id="@($"quantity-{cartitem.thucDon.MaTd}")" /></td>
-                                <td>@(thanhtien?.ToString("n0"))</td>
-                                <td>
-                                    <button class="btn btn-success updatecartitem"
-                                            data-productid="@cartitem.thucDon.MaTd">
-                                        Cập nhật
-                                    </button>
-                                    
-                                </td>
-                            </tr>
-                        }
-                        <tr>
-                            <td colspan="4" class="text-right">Tổng tiền</td>
-                            <td>@(total?.ToString("n0"))</td>
-                            <td></td>
-                        </tr>
-                    </table>
+        #logreg-forms form {
+            width: 100%;
+            max-width: 410px;
+            padding: 15px;
+            margin: auto;
+        }
 
-                }
-                else
-                {
-                    <p class="alert alert-danger">Giỏ hàng trống</p>
-                }
+        #logreg-forms .form-control {
+            position: relative;
+            box-sizing: border-box;
+            height: auto;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+            #logreg-forms .form-control:focus {
+                z-index: 2;
             }
+
+        #logreg-forms .form-signin input[type="email"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        #logreg-forms .form-signin input[type="password"] {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        #logreg-forms .social-login {
+            width: 390px;
+            margin: 0 auto;
+            margin-bottom: 14px;
+        }
+
+        #logreg-forms .social-btn {
+            font-weight: 100;
+            color: white;
+            width: 190px;
+            font-size: 0.9rem;
+        }
+
+        #logreg-forms a {
+            display: block;
+            padding-top: 10px;
+            color: lightseagreen;
+        }
+
+    #logreg-form .lines {
+        width: 200px;
+        border: 1px solid red;
+    }
+
+
+    #logreg-forms button[type="submit"] {
+        margin-top: 10px;
+    }
+
+    #logreg-forms .facebook-btn {
+        background-color: #3C589C;
+    }
+
+    #logreg-forms .google-btn {
+        background-color: #DF4B3B;
+    }
+
+    #logreg-forms .form-reset, #logreg-forms .form-signup {
+        display: none;
+    }
+
+        #logreg-forms .form-signup .social-btn {
+            width: 210px;
+        }
+
+        #logreg-forms .form-signup input {
+            margin-bottom: 2px;
+        }
+
+    .form-signup .social-login {
+        width: 210px !important;
+        margin: 0 auto;
+    }
+
+    /* Mobile */
+
+    @@media screen and (max-width:500px) {
+        #logreg-forms {
+            width: 300px;
+        }
+
+            #logreg-forms .social-login {
+                width: 200px;
+                margin: 0 auto;
+                margin-bottom: 10px;
+            }
+
+            #logreg-forms .social-btn {
+                font-size: 1.3rem;
+                font-weight: 100;
+                color: white;
+                width: 200px;
+                height: 56px;
+            }
+
+                #logreg-forms .social-btn:nth-child(1) {
+                    margin-bottom: 5px;
+                }
+
+                #logreg-forms .social-btn span {
+                    display: none;
+                }
+
+            #logreg-forms .facebook-btn:after {
+                content: 'Facebook';
+            }
+
+            #logreg-forms .google-btn:after {
+                content: 'Google+';
+            }
+    }
+
+    .bloc_left_price {
+        color: #c01508;
+        text-align: center;
+        font-weight: bold;
+        font-size: 150%;
+    }
+
+    .category_block li:hover {
+        background-color: #007bff;
+    }
+
+        .category_block li:hover a {
+            color: #ffffff;
+        }
+
+    .category_block li a {
+        color: #343a40;
+    }
+
+    .add_to_cart_block .price {
+        color: #c01508;
+        text-align: center;
+        font-weight: bold;
+        font-size: 200%;
+        margin-bottom: 0;
+    }
+
+    .add_to_cart_block .price_discounted {
+        color: #343a40;
+        text-align: center;
+        text-decoration: line-through;
+        font-size: 140%;
+    }
+
+    .product_rassurance {
+        padding: 10px;
+        margin-top: 15px;
+        background: #ffffff;
+        border: 1px solid #6c757d;
+        color: #6c757d;
+    }
+
+        .product_rassurance .list-inline {
+            margin-bottom: 0;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+            .product_rassurance .list-inline li:hover {
+                color: #343a40;
+            }
+
+    .reviews_product .fa-star {
+        color: gold;
+    }
+
+    .pagination {
+        margin-top: 20px;
+    }
+
+    footer {
+        background: #343a40;
+        padding: 40px;
+    }
+
+        footer a {
+            color: #f8f9fa !important
+        }
+</style>
+
+<
+
+
+<div id="logreg-forms">
+    <form class="form-signin" asp-action="Create" method="post" id="frmKH" runat="server">
+        <h1 class="h3 mb-3 font-weight-normal" style="text-align: center"> Nhập thông tin khách hàng</h1>
+
+
+        <div class="form-group" hidden>
+
+            <input asp-for="Id" class="form-control" />
+
+        </div>
+        <div class="form-group">
+
+            <input asp-for="Sdtkh" class="form-control" required placeholder="Nhập số điện thoại" />
+            <span asp-validation-for="Sdtkh" class="text-danger" ></span>
+        </div>
+        <div class="form-group">
+
+            <input asp-for="DiaChiKh" class="form-control" required placeholder="Nhập địa chỉ" />
+            <span asp-validation-for="DiaChiKh" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+
+            <input asp-for="Tenkh" class="form-control" required placeholder="Nhập tên" />
+            <span asp-validation-for="Tenkh" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+
+            <input asp-for="EmailKh" class="form-control" placeholder="Nhập email (Không bắt buộc)" />
+            <span asp-validation-for="EmailKh" class="text-danger"></span>
+        </div>
+
+
+    </form>
+
+
+
+
+    <br>
+
+</div>
+
+<div class="container mb-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="table-responsive">
+                @{
+
+                    var session = HttpContextAccessor.HttpContext.Session;
+                    string jsoncart = session.GetString(ASM_NET104_WedQuanAn.Controllers.CartController.CARTKEY);
+                    if (jsoncart != null)
+                    {
+                        decimal? total = 0;
+                        int stt = 1;
+                        var cart = JsonConvert.DeserializeObject<List<CartIteamModel>>(jsoncart);
+                        <table class="table text-center">
+                            <thead>
+                                <tr>
+                                    <th scope="col"> # </th>
+                                    <th scope="col">Thực Đơn</th>
+                                    <th scope="col">Giá</th>
+                                    <th scope="col" class="text-center">Số Lượng</th>
+                                    <th scope="col" class="text-right">Thành Tiền</th>
+                                    <th> </th>
+                                </tr>
+                            </thead>
+                            @foreach (var cartitem in cart)
+                            {
+                                var thanhtien = cartitem.Quantity * cartitem.thucDon.Price;
+                                total += thanhtien;
+
+                                <tr>
+                                    <td>@(stt++)</td>
+                                    <td>@cartitem.thucDon.TenTd</td>
+                                    <td>@(cartitem.thucDon.Price?.ToString("n0").Replace(",","."))  VND</td>
+                                    <td><input asp-for="@cartitem.Quantity" id="@($"quantity-{cartitem.thucDon.MaTd}")" /></td>
+                                    <td>@(thanhtien?.ToString("n0").Replace(",", "."))  VND</td>
+                                    <td>
+                                        <button class="btn btn-success updatecartitem"
+                                                data-productid="@cartitem.thucDon.MaTd">
+                                            Cập nhật
+                                        </button>
+
+                                    </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td colspan="4" class="text-right">Tổng tiền</td>
+                                <td><strong>@(total?.ToString("n0").Replace(",", "."))  VND</strong></td>
+                                <td></td>
+                            </tr>
+                        </table>
+
+                    }
+                    else
+                    {
+                        <p class="alert alert-danger">Giỏ hàng trống</p>
+                    }
+
+
+                }
+
+            </div>
+        </div>
+        <div class="col mb-2">
+            <div class="row">
+                <div class="col-sm-12  col-md-6">
+                    <a class="btn btn-block btn-light" asp-controller="thucdons" asp-action="category">Continue Shoping</a> 
+                </div>
+                <div class="col-sm-12 col-md-6 text-right">
+                    <button class="btn btn-lg btn-block btn-success text-uppercase" type="submit" form="frmKH">Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
 
 
 

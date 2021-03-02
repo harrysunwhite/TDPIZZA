@@ -1,0 +1,54 @@
+﻿@model ASM_NET104_WedQuanAn.Models.Cart
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Cart</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Sdtkh" class="control-label"></label>
+                <input asp-for="Sdtkh" class="form-control" />
+                <span asp-validation-for="Sdtkh" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DiaChiKh" class="control-label"></label>
+                <input asp-for="DiaChiKh" class="form-control" />
+                <span asp-validation-for="DiaChiKh" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tenkh" class="control-label"></label>
+                <input asp-for="Tenkh" class="form-control" />
+                <span asp-validation-for="Tenkh" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmailKh" class="control-label"></label>
+                <input asp-for="EmailKh" class="form-control" />
+                <span asp-validation-for="EmailKh" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

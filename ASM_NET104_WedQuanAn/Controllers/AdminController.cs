@@ -8,12 +8,15 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace ASM_NET104_WedQuanAn.Controllers
 {
     public class AdminController : Controller
     {
         private readonly ASMFINALContext _context;
+        public const string sessionKey = "userLogin";
         private readonly IWebHostEnvironment _hostEnvironment;
         private bool ThucDonExists(int id)
         {
@@ -27,13 +30,22 @@ namespace ASM_NET104_WedQuanAn.Controllers
         }
         public IActionResult Index()
         {
-            ViewData["Nhom"] = _context.Nhoms.ToList();
-            ViewData["All"] = _context.ThucDons.ToList();
-            ViewData["DATA"] = new SelectList(_context.Nhoms, "MaNhom", "TenNhom");
-            ViewData["User"] = _context.Users.ToList();
+            if(UserLogin()!=null)
+            {
+                ViewData["Nhom"] = _context.Nhoms.ToList();
+                ViewData["All"] = _context.ThucDons.ToList();
+                ViewData["DATA"] = new SelectList(_context.Nhoms, "MaNhom", "TenNhom");
+                ViewData["User"] = _context.Users.ToList();
 
 
-            return View();
+                return View();
+            } 
+            else
+            {
+                ViewBag.Javascript = "Please login";
+                return View("login");
+            }    
+          
             
         }
         public async Task<IActionResult> Create([Bind("MaTd,TenTd,MoTa,ImageFile,Nhom,Price")] ThucDon thucDon)
@@ -133,7 +145,95 @@ namespace ASM_NET104_WedQuanAn.Controllers
             ViewData["Nhom"] = new SelectList(_context.Nhoms, "MaNhom", "TenNhom", thucDon.Nhom);
             return View(thucDon);
         }
+        User UserLogin()
+        {
+            var session = HttpContext.Session;
+            string jsoncart = session.GetString(sessionKey);
+            if (jsoncart != null)
+            {
+                return JsonConvert.DeserializeObject<User>(jsoncart);
+            }
+            return null;
+        }
+
+        public IActionResult Sucess()
+        {
+
+            return View("Sucess");
+
+        }
+        [HttpPost]
+        public IActionResult LoginWithUser(User user)
+        {
+            var u = _context.Users.Where(p => p.UserEmail.Equals(user.UserEmail) && p.Pass.Equals(user.Pass)).FirstOrDefault();
+
+            if (u != null)
+            {
+                var session = HttpContext.Session;
+                string jsoncart = JsonConvert.SerializeObject(u);
+                session.SetString(sessionKey, jsoncart);
+                return RedirectToAction("index", "Admin");
+            }
+            else
+            {
+                ViewBag.error = "invail account";
+                return View("login");
+            }
+        }
+
+        [HttpGet]
+        public IActionResult LoginWithUser()
+        {
+            if (UserLogin() != null)
+            {
+                return Index();
+            }
+            else
+            {
+                ViewBag.Javascript = "request time out";
+                return View("Index");
+            }
+        }
+
+
+        public IActionResult Login()
+        {
+            if (UserLogin() != null)
+            {
+                return LoginWithUser(UserLogin());
+            }
+            else
+            {
+                return View("Login");
+            }
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove("userLogin");
+            return RedirectToAction("login", "admin");
+        }
+
+        // GET: Users
+        //public IActionResult Login()
+        //{
+        //    if (UserLogin() != null)
+        //    {
+        //        return LoginWithUser(UserLogin());
+        //    }
+        //    else
+        //    {
+        //        return View("Index");
+        //    }
+        //}
+
+        // GET: Users/Details/5
+
 
 
     }
+
+
+
+
 }

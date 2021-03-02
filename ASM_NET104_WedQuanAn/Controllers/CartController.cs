@@ -13,7 +13,7 @@ namespace ASM_NET104_WedQuanAn.Controllers
 {
     public class CartController : Controller
     {
-        public const string CARTKEY = "cart";
+        public const string CARTKEY = "cartCache";
         private ILogger<CartController> _logger;
         private readonly ASMFINALContext _context;
 
@@ -128,7 +128,37 @@ namespace ASM_NET104_WedQuanAn.Controllers
 
         public IActionResult CartFinal()
         {
-            return View("Cart", ListCart());
+            return View("Cart");
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Sdtkh,DiaChiKh,Tenkh,EmailKh")] Cart cart)
+        {
+            if (ModelState.IsValid)
+            {
+                cart.Id = _context.Carts.Count()+1;
+                _context.Add(cart);
+                await _context.SaveChangesAsync();
+                
+
+
+                var liscart = ListCart();
+                foreach(var item in liscart)
+                {
+                   var TempData = new CartItem();
+                    TempData.Id = cart.Id;
+                    TempData.MaTd = item.thucDon.MaTd;
+                    TempData.SoLuong = item.Quantity;
+                    _context.Add(TempData);
+                    await _context.SaveChangesAsync();
+                }
+                HttpContext.Session.Clear();
+                return RedirectToAction( "category", "thucdons");
+               
+            }
+            return View(cart);
         }
 
 
@@ -136,6 +166,7 @@ namespace ASM_NET104_WedQuanAn.Controllers
         {
             return View(await _context.ThucDons.ToListAsync());
         }
+
 
 
 

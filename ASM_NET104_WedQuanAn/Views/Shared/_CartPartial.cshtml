@@ -7,7 +7,7 @@
 
 
 <div class="modal-dialog">
-    <div class="modal-content" style="width:600px">
+    <div class="modal-content" style="width:700px">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="myModalLabel">GIỎ HÀNG</h4>
@@ -41,20 +41,20 @@
                                 <tr>
                                     <td>@(stt++)</td>
                                     <td>@cartitem.thucDon.TenTd</td>
-                                    <td>@(cartitem.thucDon.Price?.ToString("n0"))</td>
+                                    <td>@(cartitem.thucDon.Price?.ToString("n0").Replace(",", "."))VND</td>
                                     <td>@cartitem.Quantity</td>
-                                    <td>@(thanhtien?.ToString("n0"))</td>
+                                    <td>@(thanhtien?.ToString("n0").Replace(",", "."))  VND</td>
                                     <td>
                                         <button class="btn btn-danger"
                                                 onclick="remove(@cartitem.thucDon.MaTd)">
-                                            Xoá
+                                            <i class="fa fa-trash"></i>
                                         </button>
                                     </td>
                                 </tr>
                             }
                             <tr>
                                 <td colspan="4" class="text-right">Tổng tiền</td>
-                                <td>@(total?.ToString("n0"))</td>
+                                <td><string>@(total?.ToString("n0").Replace(",", "."))  VND</string></td>
                                 <td></td>
                             </tr>
                         </table>

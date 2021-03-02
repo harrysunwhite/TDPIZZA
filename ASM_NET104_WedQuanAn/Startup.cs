@@ -34,6 +34,12 @@ namespace ASM_NET104_WedQuanAn
                 cfg.Cookie.Name = "CartCache";             // Đặt tên Session - tên này sử dụng ở Browser (Cookie)
                 cfg.IdleTimeout = new TimeSpan(0, 30, 0);    // Thời gian tồn tại của Session
             });
+
+            services.AddSession(cfg =>
+            {                    // Đăng ký dịch vụ Session
+                cfg.Cookie.Name = "userLogin";             // Đặt tên Session - tên này sử dụng ở Browser (Cookie)
+                cfg.IdleTimeout = TimeSpan.FromMinutes(10);    // Thời gian tồn tại của Session
+            });
             var connection = Configuration.GetConnectionString("ProductConnection");
            
           

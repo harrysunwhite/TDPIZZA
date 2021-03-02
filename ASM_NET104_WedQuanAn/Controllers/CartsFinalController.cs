@@ -7,25 +7,24 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ASM_NET104_WedQuanAn.Models;
 
-namespace ASM_NET104_WedQuanAn.Views.Cart
+namespace ASM_NET104_WedQuanAn.Controllers
 {
-    public class CartItemsController : Controller
+    public class CartsFinalController : Controller
     {
         private readonly ASMFINALContext _context;
 
-        public CartItemsController(ASMFINALContext context)
+        public CartsFinalController(ASMFINALContext context)
         {
             _context = context;
         }
 
-        // GET: CartItems
+        // GET: CartsFinal
         public async Task<IActionResult> Index()
         {
-            var aSMFINALContext = _context.CartItems.Include(c => c.IdNavigation).Include(c => c.MaTdNavigation);
-            return View(await aSMFINALContext.ToListAsync());
+            return View(await _context.Carts.ToListAsync());
         }
 
-        // GET: CartItems/Details/5
+        // GET: CartsFinal/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,45 +32,39 @@ namespace ASM_NET104_WedQuanAn.Views.Cart
                 return NotFound();
             }
 
-            var cartItem = await _context.CartItems
-                .Include(c => c.IdNavigation)
-                .Include(c => c.MaTdNavigation)
+            var cart = await _context.Carts
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (cartItem == null)
+            if (cart == null)
             {
                 return NotFound();
             }
 
-            return View(cartItem);
+            return View(cart);
         }
 
-        // GET: CartItems/Create
+        // GET: CartsFinal/Create
         public IActionResult Create()
         {
-            ViewData["Id"] = new SelectList(_context.Carts, "Id", "DiaChiKh");
-            ViewData["MaTd"] = new SelectList(_context.ThucDons, "MaTd", "Hinh");
             return View();
         }
 
-        // POST: CartItems/Create
+        // POST: CartsFinal/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,MaTd,SoLuong")] CartItem cartItem)
+        public async Task<IActionResult> Create([Bind("Id,Sdtkh,DiaChiKh,Tenkh,EmailKh")] Cart cart)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(cartItem);
+                _context.Add(cart);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Id"] = new SelectList(_context.Carts, "Id", "DiaChiKh", cartItem.Id);
-            ViewData["MaTd"] = new SelectList(_context.ThucDons, "MaTd", "Hinh", cartItem.MaTd);
-            return View(cartItem);
+            return View("~/Views/");
         }
 
-        // GET: CartItems/Edit/5
+        // GET: CartsFinal/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -79,24 +72,22 @@ namespace ASM_NET104_WedQuanAn.Views.Cart
                 return NotFound();
             }
 
-            var cartItem = await _context.CartItems.FindAsync(id);
-            if (cartItem == null)
+            var cart = await _context.Carts.FindAsync(id);
+            if (cart == null)
             {
                 return NotFound();
             }
-            ViewData["Id"] = new SelectList(_context.Carts, "Id", "DiaChiKh", cartItem.Id);
-            ViewData["MaTd"] = new SelectList(_context.ThucDons, "MaTd", "Hinh", cartItem.MaTd);
-            return View(cartItem);
+            return View(cart);
         }
 
-        // POST: CartItems/Edit/5
+        // POST: CartsFinal/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,MaTd,SoLuong")] CartItem cartItem)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Sdtkh,DiaChiKh,Tenkh,EmailKh")] Cart cart)
         {
-            if (id != cartItem.Id)
+            if (id != cart.Id)
             {
                 return NotFound();
             }
@@ -105,12 +96,12 @@ namespace ASM_NET104_WedQuanAn.Views.Cart
             {
                 try
                 {
-                    _context.Update(cartItem);
+                    _context.Update(cart);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CartItemExists(cartItem.Id))
+                    if (!CartExists(cart.Id))
                     {
                         return NotFound();
                     }
@@ -121,12 +112,10 @@ namespace ASM_NET104_WedQuanAn.Views.Cart
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Id"] = new SelectList(_context.Carts, "Id", "DiaChiKh", cartItem.Id);
-            ViewData["MaTd"] = new SelectList(_context.ThucDons, "MaTd", "Hinh", cartItem.MaTd);
-            return View(cartItem);
+            return View(cart);
         }
 
-        // GET: CartItems/Delete/5
+        // GET: CartsFinal/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,32 +123,30 @@ namespace ASM_NET104_WedQuanAn.Views.Cart
                 return NotFound();
             }
 
-            var cartItem = await _context.CartItems
-                .Include(c => c.IdNavigation)
-                .Include(c => c.MaTdNavigation)
+            var cart = await _context.Carts
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (cartItem == null)
+            if (cart == null)
             {
                 return NotFound();
             }
 
-            return View(cartItem);
+            return View(cart);
         }
 
-        // POST: CartItems/Delete/5
+        // POST: CartsFinal/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cartItem = await _context.CartItems.FindAsync(id);
-            _context.CartItems.Remove(cartItem);
+            var cart = await _context.Carts.FindAsync(id);
+            _context.Carts.Remove(cart);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CartItemExists(int id)
+        private bool CartExists(int id)
         {
-            return _context.CartItems.Any(e => e.Id == id);
+            return _context.Carts.Any(e => e.Id == id);
         }
     }
 }

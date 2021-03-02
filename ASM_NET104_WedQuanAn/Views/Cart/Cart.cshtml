@@ -3,16 +3,9 @@
 @using Newtonsoft.Json
 @inject IHttpContextAccessor HttpContextAccessor
 
-<h2>GIỎ HÀNG</h2>
 
 
-<div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">GIỎ HÀNG</h4>
-        </div>
-        <div class="modal-body">
+
             @{
                 var session = HttpContextAccessor.HttpContext.Session;
                 string jsoncart = session.GetString(ASM_NET104_WedQuanAn.Controllers.CartController.CARTKEY);
@@ -46,8 +39,7 @@
                                             data-productid="@cartitem.thucDon.MaTd">
                                         Cập nhật
                                     </button>
-                                    <a asp-route="removecart" asp-route-productid="@cartitem.thucDon.MaTd"
-                                       class="btn btn-danger">Xóa</a>
+                                    
                                 </td>
                             </tr>
                         }
@@ -65,12 +57,6 @@
                 }
             }
 
-        </div>
-        <div class="modal-footer">
-            <a asp-controller="Product" asp-action="Checkout" class="btn btn-success">Checkout</a>
-        </div>
-    </div>
-</div>
 
 
 

@@ -126,6 +126,11 @@ namespace ASM_NET104_WedQuanAn.Controllers
             return PartialView("_CartPartial", ListCart());
         }
 
+        public IActionResult CartFinal()
+        {
+            return View("Cart", ListCart());
+        }
+
 
         public async Task<IActionResult> Index()
         {

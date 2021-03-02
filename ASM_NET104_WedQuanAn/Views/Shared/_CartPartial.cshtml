@@ -45,7 +45,7 @@
                                     <td>@cartitem.Quantity</td>
                                     <td>@(thanhtien?.ToString("n0"))</td>
                                     <td>
-                                        <button class="btn btn-sm btn-outline-primary my-cart-btn"
+                                        <button class="btn btn-danger"
                                                 onclick="remove(@cartitem.thucDon.MaTd)">
                                             Xoá
                                         </button>
@@ -76,7 +76,7 @@
         <div class="modal-footer">
             @if (cart.Count > 0)
             {
-                <a asp-controller="Product" asp-action="Checkout" class="btn btn-success">Checkout</a>
+                <a asp-controller="cart" asp-action="cartfinal" class="btn btn-success">Checkout</a>
             }
             else
             {
